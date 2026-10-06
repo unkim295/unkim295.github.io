@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Instagram Feed - Yua Mikami</title>
+    <title>THX牛逼 - 專屬相簿動態</title>
     <style>
         * {
             box-sizing: border-box;
@@ -18,106 +18,65 @@
             color: #262626;
             display: flex;
             justify-content: center;
-            align-items: center;
             min-height: 100vh;
-            padding: 0;
         }
 
-        /* 手機 Mockup 容器 */
-        .phone-wrapper {
+        /* 手機寬度容器 */
+        .feed-container {
             width: 100%;
-            max-width: 430px;
+            max-width: 470px;
             background: #ffffff;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            position: relative;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            padding-bottom: 60px; /* 留出底部導航欄位置 */
         }
 
         /* 頂部導航列 */
-        .header {
-            height: 52px;
+        .top-nav {
+            height: 54px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 0 16px;
-            border-bottom: 0.5px solid #efefef;
+            border-bottom: 0.5px solid #dbdbdb;
             position: sticky;
             top: 0;
             background: rgba(255, 255, 255, 0.98);
             backdrop-filter: blur(10px);
-            z-index: 100;
+            z-index: 1000;
         }
 
-        .header-logo {
-            font-family: 'Brush Script MT', cursive, sans-serif;
-            font-size: 26px;
-            font-weight: bold;
-            color: #262626;
+        .brand-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: #111;
             letter-spacing: -0.5px;
         }
 
-        .header-icons {
+        .nav-right-icons {
             display: flex;
-            gap: 20px;
+            gap: 18px;
             align-items: center;
         }
 
-        .header-icons svg {
+        .nav-right-icons svg {
             width: 24px;
             height: 24px;
-            fill: none;
             stroke: #262626;
             stroke-width: 2;
+            fill: none;
+            cursor: pointer;
         }
 
-        /* 快拍 (Story) 專區 */
-        .stories-bar {
-            display: flex;
-            gap: 14px;
-            padding: 12px 16px;
-            overflow-x: auto;
-            border-bottom: 0.5px solid #efefef;
-            scrollbar-width: none;
-        }
-        .stories-bar::-webkit-scrollbar { display: none; }
-
-        .story-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 5px;
-            flex-shrink: 0;
+        /* 貼文卡片 */
+        .insta-post {
+            border-bottom: 8px solid #f0f2f5;
+            background: #fff;
         }
 
-        .story-ring {
-            width: 66px;
-            height: 66px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
-            padding: 2.5px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .story-avatar {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background-color: #fff;
-            border: 2px solid #fff;
-            object-fit: cover;
-        }
-
-        .story-username {
-            font-size: 11px;
-            color: #262626;
-            letter-spacing: -0.2px;
-        }
-
-        /* 貼文頂部作者欄 */
+        /* 貼文頭部 */
         .post-header {
             display: flex;
             align-items: center;
@@ -125,35 +84,27 @@
             padding: 10px 14px;
         }
 
-        .post-user {
+        .user-info {
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
-        .post-avatar-ring {
+        .avatar {
             width: 38px;
             height: 38px;
             border-radius: 50%;
-            background: linear-gradient(45deg, #f09433, #dc2743, #bc1888);
-            padding: 2px;
-        }
-
-        .post-avatar {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            border: 1.5px solid #fff;
             object-fit: cover;
-            display: block;
+            border: 1.5px solid #e1306c;
+            padding: 1px;
         }
 
-        .user-meta {
+        .user-names {
             display: flex;
             flex-direction: column;
         }
 
-        .user-name-row {
+        .user-name-line {
             display: flex;
             align-items: center;
             gap: 4px;
@@ -165,7 +116,7 @@
             color: #262626;
         }
 
-        .badge-verified {
+        .verified-badge {
             width: 13px;
             height: 13px;
             fill: #0095f6;
@@ -176,364 +127,265 @@
             color: #65676b;
         }
 
-        .post-more {
-            cursor: pointer;
-            padding: 4px;
-        }
-
-        /* 輪播主圖區 */
-        .carousel-container {
-            position: relative;
+        /* 貼文主圖片 */
+        .post-media {
             width: 100%;
-            aspect-ratio: 4 / 5;
-            background: #f0f0f0;
-            overflow: hidden;
-        }
-
-        .carousel-track {
-            display: flex;
-            width: 100%;
-            height: 100%;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            scrollbar-width: none;
-            scroll-behavior: smooth;
-        }
-        .carousel-track::-webkit-scrollbar { display: none; }
-
-        .carousel-slide {
-            flex: 0 0 100%;
-            width: 100%;
-            height: 100%;
-            scroll-snap-align: start;
+            background: #f8f8f8;
             position: relative;
         }
 
-        .carousel-slide img {
+        .post-media img {
             width: 100%;
-            height: 100%;
-            object-fit: cover;
             display: block;
+            object-fit: cover;
+            max-height: 600px;
         }
 
-        .carousel-counter {
-            position: absolute;
-            top: 14px;
-            right: 14px;
-            background: rgba(18, 18, 18, 0.7);
-            color: #fff;
-            font-size: 12px;
-            font-weight: 500;
-            padding: 4px 9px;
-            border-radius: 14px;
-            backdrop-filter: blur(4px);
-            z-index: 10;
-        }
-
-        /* 雙擊愛心浮層 */
-        .heart-bubble {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            pointer-events: none;
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 20;
-        }
-        .heart-bubble.pop {
-            transform: translate(-50%, -50%) scale(1.3);
-        }
-
-        /* 貼文互動列 */
+        /* 貼文操作欄 */
         .post-actions {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 12px 14px 8px 14px;
+            padding: 10px 14px;
         }
 
-        .left-actions {
+        .action-left {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 14px;
         }
 
-        .action-icon {
+        /* 點贊組件與 "THX很喜歡" */
+        .like-box {
+            display: flex;
+            align-items: center;
+            gap: 6px;
             cursor: pointer;
+            user-select: none;
+        }
+
+        .like-icon svg {
+            width: 25px;
+            height: 25px;
+            stroke: #262626;
+            stroke-width: 2;
+            fill: none;
             transition: transform 0.15s ease;
         }
-        .action-icon:active { transform: scale(0.85); }
-        .action-icon svg { width: 25px; height: 25px; stroke: #262626; stroke-width: 2; fill: none; }
-        .action-icon.liked svg { stroke: #ed4956; fill: #ed4956; }
 
-        /* 分頁指示小圓點 */
-        .pagination-dots {
-            display: flex;
-            gap: 4px;
+        .like-box:active .like-icon svg {
+            transform: scale(1.2);
         }
 
-        .dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: #dbdbdb;
-            transition: background-color 0.2s;
+        .like-box.liked .like-icon svg {
+            stroke: #ed4956;
+            fill: #ed4956;
         }
-        .dot.active { background: #0095f6; }
+
+        .like-text {
+            font-size: 13px;
+            font-weight: 600;
+            color: #262626;
+        }
+
+        .action-btn svg {
+            width: 24px;
+            height: 24px;
+            stroke: #262626;
+            stroke-width: 2;
+            fill: none;
+            cursor: pointer;
+        }
 
         /* 貼文文字內容 */
-        .post-content {
-            padding: 0 14px 18px 14px;
+        .post-caption {
+            padding: 0 14px 14px 14px;
             font-size: 13.5px;
             line-height: 1.45;
         }
 
-        .likes-count {
-            font-weight: 600;
+        .caption-text {
             margin-bottom: 6px;
         }
 
-        .caption {
-            margin-bottom: 6px;
-            color: #262626;
-        }
-        .caption .caption-username {
+        .caption-text .bold-name {
             font-weight: 600;
             margin-right: 6px;
         }
 
-        .view-comments {
+        .comment-hint {
             color: #8e8e8e;
             font-size: 13px;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
             cursor: pointer;
         }
 
-        .post-time {
+        .post-date {
             color: #8e8e8e;
             font-size: 11px;
             text-transform: uppercase;
-            letter-spacing: 0.2px;
         }
 
-        /* 底部導航標籤欄 */
-        .tab-bar {
-            height: 50px;
+        /* 底部導航欄（真實可點擊） */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            max-width: 470px;
+            height: 52px;
+            background: #ffffff;
+            border-top: 0.5px solid #dbdbdb;
             display: flex;
             align-items: center;
             justify-content: space-around;
-            border-top: 0.5px solid #efefef;
-            background: #ffffff;
-            position: sticky;
-            bottom: 0;
-            margin-top: auto;
-            z-index: 100;
+            z-index: 1000;
         }
 
-        .tab-item svg {
-            width: 26px;
-            height: 26px;
+        .nav-link {
+            text-decoration: none;
+            color: #262626;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 25%;
+            height: 100%;
+            font-size: 10px;
+            gap: 2px;
+        }
+
+        .nav-link svg {
+            width: 24px;
+            height: 24px;
             stroke: #262626;
             stroke-width: 2;
             fill: none;
         }
 
-        .tab-avatar {
-            width: 26px;
-            height: 26px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 1.5px solid #262626;
+        .nav-link.active svg {
+            fill: #262626;
         }
     </style>
 </head>
 <body>
 
-    <div class="phone-wrapper">
+    <div class="feed-container">
         <!-- 頂部導航列 -->
-        <header class="header">
-            <span class="header-logo">Instagram</span>
-            <div class="header-icons">
-                <!-- 消息圖示 -->
+        <header class="top-nav">
+            <span class="brand-title">THX牛逼</span>
+            <div class="nav-right-icons">
                 <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
                 <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
             </div>
         </header>
 
-        <!-- 快拍 (Stories) 導航列 -->
-        <div class="stories-bar">
-            <div class="story-item">
-                <div class="story-ring">
-                    <img src="https://i.ibb.co/8LvZ90Wd/p4-jpg.jpg" class="story-avatar" alt="yua_mikami">
-                </div>
-                <span class="story-username">yua_mikami</span>
-            </div>
-            <div class="story-item">
-                <div class="story-ring">
-                    <img src="https://i.ibb.co/v64TBZ4W/p3-jpg.jpg" class="story-avatar" alt="thx_life">
-                </div>
-                <span class="story-username">thx_life</span>
-            </div>
-            <div class="story-item">
-                <div class="story-ring">
-                    <img src="https://i.ibb.co/zT1CcWNM/p1-jpg.jpg" class="story-avatar" alt="fashion_style">
-                </div>
-                <span class="story-username">styling</span>
-            </div>
-            <div class="story-item">
-                <div class="story-ring">
-                    <img src="https://i.ibb.co/99XVXjTP/p2-jpg.jpg" class="story-avatar" alt="daily_snap">
-                </div>
-                <span class="story-username">tokyo_snap</span>
-            </div>
-        </div>
+        <!-- 動態流貼文列表（10 篇完整貼文） -->
+        <main id="feedList"></main>
 
-        <!-- 貼文作者資訊 -->
-        <div class="post-header">
-            <div class="post-user">
-                <div class="post-avatar-ring">
-                    <img src="https://i.ibb.co/8LvZ90Wd/p4-jpg.jpg" class="post-avatar" alt="yua">
-                </div>
-                <div class="user-meta">
-                    <div class="user-name-row">
-                        <span class="username">yua_mikami</span>
-                        <svg class="badge-verified" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-                    </div>
-                    <span class="location">Tokyo, Japan</span>
-                </div>
-            </div>
-            <div class="post-more">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="#262626"><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/><circle cx="5" cy="12" r="2"/></svg>
-            </div>
-        </div>
-
-        <!-- 輪播主圖卡片 (收納 10 張精緻照片) -->
-        <div class="carousel-container" id="carouselWrapper">
-            <div class="carousel-counter" id="slideBadge">1/10</div>
-            
-            <div class="carousel-track" id="carouselTrack">
-                <div class="carousel-slide"><img src="https://i.ibb.co/8LvZ90Wd/p4-jpg.jpg" alt="Photo 1"></div>
-                <div class="carousel-slide"><img src="https://i.ibb.co/v64TBZ4W/p3-jpg.jpg" alt="Photo 2"></div>
-                <div class="carousel-slide"><img src="https://i.ibb.co/27FyXjLb/956508-E3-2-EC6-4-DE8-8-DA9-C3-FAD6582-AA4.jpg" alt="Photo 3"></div>
-                <div class="carousel-slide"><img src="https://i.ibb.co/F4QJKx8F/51522-C94-9584-4-DE2-B62-D-E1-A9-CB747-F40.jpg" alt="Photo 4"></div>
-                <div class="carousel-slide"><img src="https://i.ibb.co/27v3DJ0y/1-E60-F9-E1-2-F2-F-42-A3-AB08-6298131-C7-ABB.jpg" alt="Photo 5"></div>
-                <div class="carousel-slide"><img src="https://i.ibb.co/Z6j9JTCQ/70-AAB0-A1-E6-DF-41-C0-9524-15-A0-EB26-A6-FA.jpg" alt="Photo 6"></div>
-                <div class="carousel-slide"><img src="https://i.ibb.co/ccKqzWZ0/28-D9954-A-51-E6-4-D56-ADFD-381-A343-FBDF3.jpg" alt="Photo 7"></div>
-                <div class="carousel-slide"><img src="https://i.ibb.co/Q7Lt06gw/5131-B16-D-3639-4-A03-92-C0-F1-BD71-D5089-F.jpg" alt="Photo 8"></div>
-                <div class="carousel-slide"><img src="https://i.ibb.co/zT1CcWNM/p1-jpg.jpg" alt="Photo 9"></div>
-                <div class="carousel-slide"><img src="https://i.ibb.co/99XVXjTP/p2-jpg.jpg" alt="Photo 10"></div>
-            </div>
-
-            <!-- 雙擊心形動畫 -->
-            <div class="heart-bubble" id="heartPop">
-                <svg width="80" height="80" viewBox="0 0 24 24" fill="#ffffff" style="filter: drop-shadow(0 4px 12px rgba(0,0,0,0.3));"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-            </div>
-        </div>
-
-        <!-- 互動操作按鈕列 -->
-        <div class="post-actions">
-            <div class="left-actions">
-                <div class="action-icon" id="likeBtn">
-                    <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                </div>
-                <div class="action-icon">
-                    <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-                </div>
-                <div class="action-icon">
-                    <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-                </div>
-            </div>
-
-            <!-- 分頁圓點指示器 -->
-            <div class="pagination-dots" id="dotsContainer">
-                <div class="dot active"></div>
-                <div class="dot"></div>
-                <div class="dot"></div>
-                <div class="dot"></div>
-                <div class="dot"></div>
-            </div>
-
-            <!-- 收藏書籤 -->
-            <div class="action-icon" id="bookmarkBtn">
-                <svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
-            </div>
-        </div>
-
-        <!-- 貼文描述與文案 -->
-        <div class="post-content">
-            <div class="likes-count" id="likesText">THX 及其他人赞了</div>
-            <div class="caption">
-                <span class="caption-username">yua_mikami</span>
-                THX所有 ♡
-            </div>
-            <div class="view-comments">查看全部 1,280 条评论</div>
-            <div class="post-time">2 小时前 · 查看翻译</div>
-        </div>
-
-        <!-- 底部導航欄 -->
-        <nav class="tab-bar">
-            <div class="tab-item"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
-            <div class="tab-item"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
-            <div class="tab-item"><svg viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg></div>
-            <div class="tab-item"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></div>
-            <div class="tab-item">
-                <img src="https://i.ibb.co/8LvZ90Wd/p4-jpg.jpg" class="tab-avatar" alt="my-profile">
-            </div>
+        <!-- 底部真實導航欄 -->
+        <nav class="bottom-nav">
+            <!-- 回到頁面頂部 -->
+            <a href="javascript:window.scrollTo({top: 0, behavior: 'smooth'});" class="nav-link active" title="回到頂部">
+                <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            </a>
+            <!-- 直達三上悠亞官方 Instagram -->
+            <a href="https://www.instagram.com/yua_mikami/" target="_blank" class="nav-link" title="官方 Instagram">
+                <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            </a>
+            <!-- 重新整理當前相簿 -->
+            <a href="javascript:location.reload();" class="nav-link" title="刷新動態">
+                <svg viewBox="0 0 24 24"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+            </a>
+            <!-- 回到 GitHub 倉庫主頁 -->
+            <a href="https://github.com/unkim295/unkim295.github.io" target="_blank" class="nav-link" title="GitHub 倉庫">
+                <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </a>
         </nav>
     </div>
 
-    <!-- 交互腳本 -->
     <script>
-        const track = document.getElementById('carouselTrack');
-        const badge = document.getElementById('slideBadge');
-        const dots = document.querySelectorAll('.dot');
-        const totalSlides = 10;
+        // 10 張照片資料與文案
+        const postsData = [
+            { img: "https://i.ibb.co/8LvZ90Wd/p4-jpg.jpg", caption: "今天的日常散步，心情特別好 ♡", loc: "Tokyo, Japan", time: "1 小時前" },
+            { img: "https://i.ibb.co/v64TBZ4W/p3-jpg.jpg", caption: "生日蛋糕太可愛了～謝謝大家的祝福 🎂✨", loc: "Roppongi, Tokyo", time: "3 小時前" },
+            { img: "https://i.ibb.co/27FyXjLb/956508-E3-2-EC6-4-DE8-8-DA9-C3-FAD6582-AA4.jpg", caption: "東京車站前的晴天午後 ☀️", loc: "Tokyo Station", time: "5 小時前" },
+            { img: "https://i.ibb.co/F4QJKx8F/51522-C94-9584-4-DE2-B62-D-E1-A9-CB747-F40.jpg", caption: "試穿了新的灰色連身裙，好看嗎？👗", loc: "Shibuya", time: "8 小時前" },
+            { img: "https://i.ibb.co/27v3DJ0y/1-E60-F9-E1-2-F2-F-42-A3-AB08-6298131-C7-ABB.jpg", caption: "鏡子自拍一束花造型 🌸", loc: "Studio Omotesando", time: "12 小時前" },
+            { img: "https://i.ibb.co/Z6j9JTCQ/70-AAB0-A1-E6-DF-41-C0-9524-15-A0-EB26-A6-FA.jpg", caption: "眨個眼～大家今天過得怎麼樣？😉", loc: "Hair Salon Ginza", time: "1 天前" },
+            { img: "https://i.ibb.co/ccKqzWZ0/28-D9954-A-51-E6-4-D56-ADFD-381-A343-FBDF3.jpg", caption: "Hello Kitty 的小包包真的太百搭了 🎀", loc: "Harajuku", time: "1 天前" },
+            { img: "https://i.ibb.co/Q7Lt06gw/5131-B16-D-3639-4-A03-92-C0-F1-BD71-D5089-F.jpg", caption: "微捲的髮型是不是更溫柔一些？💇‍♀️", loc: "Daikanyama", time: "2 天前" },
+            { img: "https://i.ibb.co/zT1CcWNM/p1-jpg.jpg", caption: "精緻小禮服造型，特別的日子 ✨", loc: "Grand Hyatt Tokyo", time: "2 天前" },
+            { img: "https://i.ibb.co/99XVXjTP/p2-jpg.jpg", caption: "夜幕降臨，浪漫的燈光長廊 💫", loc: "Golden Sun Club", time: "3 天前" }
+        ];
 
-        // 滑動更新分頁圓點與標籤
-        track.addEventListener('scroll', () => {
-            const index = Math.round(track.scrollLeft / track.clientWidth);
-            badge.innerText = `${index + 1}/${totalSlides}`;
-            
-            dots.forEach((dot, i) => {
-                dot.classList.toggle('active', i === Math.min(i, index % dots.length));
-            });
+        const container = document.getElementById('feedList');
+
+        // 自動動態生成 10 篇 Instagram 貼文
+        postsData.forEach((post, i) => {
+            const article = document.createElement('article');
+            article.className = 'insta-post';
+            article.innerHTML = `
+                <div class="post-header">
+                    <div class="user-info">
+                        <img src="${post.img}" class="avatar" alt="yua">
+                        <div class="user-names">
+                            <div class="user-name-line">
+                                <span class="username">yua_mikami</span>
+                                <svg class="verified-badge" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                            </div>
+                            <span class="location">${post.loc}</span>
+                        </div>
+                    </div>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="#262626"><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/><circle cx="5" cy="12" r="2"/></svg>
+                </div>
+
+                <div class="post-media">
+                    <img src="${post.img}" alt="Post image ${i + 1}" loading="lazy">
+                </div>
+
+                <div class="post-actions">
+                    <div class="action-left">
+                        <div class="like-box" onclick="togglePostLike(this)">
+                            <div class="like-icon">
+                                <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                            </div>
+                            <span class="like-text">THX很喜欢</span>
+                        </div>
+                        <div class="action-btn">
+                            <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                        </div>
+                        <div class="action-btn">
+                            <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                        </div>
+                    </div>
+                    <div class="action-btn" onclick="toggleBookmark(this)">
+                        <svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+                    </div>
+                </div>
+
+                <div class="post-caption">
+                    <div class="caption-text">
+                        <span class="bold-name">yua_mikami</span>
+                        ${post.caption}
+                    </div>
+                    <div class="comment-hint">查看全部评论...</div>
+                    <div class="post-date">${post.time}</div>
+                </div>
+            `;
+            container.appendChild(article);
         });
 
-        // 點贊交互邏輯
-        const likeBtn = document.getElementById('likeBtn');
-        const likesText = document.getElementById('likesText');
-        let liked = false;
-
-        function toggleLike() {
-            liked = !liked;
-            likeBtn.classList.toggle('liked', liked);
-            likesText.innerText = liked ? "THX、yua 及其他 8,920 人赞了" : "THX 及其他人赞了";
+        // 點贊切換
+        function togglePostLike(el) {
+            el.classList.toggle('liked');
         }
 
-        likeBtn.addEventListener('click', toggleLike);
-
-        // 雙擊主圖點贊 + 浮層動畫
-        const wrapper = document.getElementById('carouselWrapper');
-        const heartPop = document.getElementById('heartPop');
-        let lastTap = 0;
-
-        wrapper.addEventListener('click', () => {
-            const now = new Date().getTime();
-            if (now - lastTap < 300) {
-                if (!liked) toggleLike();
-                heartPop.classList.add('pop');
-                setTimeout(() => heartPop.classList.remove('pop'), 600);
-            }
-            lastTap = now;
-        });
-
-        // 收藏按鈕點擊切換
-        const bookmarkBtn = document.getElementById('bookmarkBtn');
-        bookmarkBtn.addEventListener('click', () => {
-            const svg = bookmarkBtn.querySelector('svg');
+        // 收藏切換
+        function toggleBookmark(el) {
+            const svg = el.querySelector('svg');
             const isSaved = svg.getAttribute('fill') === '#262626';
             svg.setAttribute('fill', isSaved ? 'none' : '#262626');
-        });
+        }
     </script>
 </body>
 </html>
