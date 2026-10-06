@@ -3,25 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>❤️❤️❤️❤️三上悠亚beautiful❤️❤️❤️❤️</title>
+    <title>三上悠亞 照片精選相簿</title>
     <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            background: #f5f7fa;
+            background-color: #fff0f5;
             color: #333;
+            padding: 24px 12px;
+            text-align: center;
         }
-        h1 { color: #2c3e50; }
-        p { font-size: 1.1rem; color: #666; }
+        h1 {
+            color: #d63384;
+            margin-bottom: 24px;
+            font-size: 1.8rem;
+        }
+        .category-box {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 20px 15px;
+            margin: 0 auto 25px auto;
+            max-width: 600px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+        .category-title {
+            color: #ff69b4;
+            font-size: 1.25rem;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px dashed #fce4ec;
+        }
+        .photo-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+        }
+        .photo-grid img {
+            width: calc(50% - 6px);
+            height: 220px;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        footer {
+            margin-top: 30px;
+            font-size: 0.85rem;
+            color: #999;
+        }
     </style>
 </head>
 <body>
-    <h1>🎉 恭喜！我的個人網站上線了！</h1>
-    <p>網址：unkim295.github.io</p>
+
+    <h1>🌸 三上悠亞 專屬相簿</h1>
+
+    <!-- 第一個分類 -->
+    <div class="category-box">
+        <h2 class="category-title">📷 分類一：日常生活</h2>
+        <div class="photo-grid">
+            <img src="p1.jpg" alt="日常 1">
+            <img src="p2.jpg" alt="日常 2">
+        </div>
+    </div>
+
+    <!-- 第二個分類 -->
+    <div class="category-box">
+        <h2 class="category-title">✨ 分類二：雜誌寫真</h2>
+        <div class="photo-grid">
+            <img src="p3.jpg" alt="寫真 1">
+            <img src="p4.jpg" alt="寫真 2">
+        </div>
+    </div>
+
+    <footer>
+        unkim295.github.io · 個人相簿
+    </footer>
+
 </body>
 </html>
